@@ -35,20 +35,21 @@ static const SceneVertex vertices[] =
 
     //创建OpenGL ES 2.0 上下文
     GLKView*view = (GLKView*)self.view;
-    view.context = [[EAGLContext alloc]initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    view.context = [[EAGLContext alloc]initWithAPI:kEAGLRenderingAPIOpenGLES3];
     //把view的上下文设置为当前上下文
     [EAGLContext setCurrentContext:view.context];
     
     //创建效果，渲染使用
     self.baseEffect = [[GLKBaseEffect alloc]init];
     self.baseEffect.useConstantColor = GL_TRUE;
+    //图形颜色
     self.baseEffect.constantColor = GLKVector4Make(
                                                    1.0f, // Red
                                                    1.0f, // Green
                                                    1.0f, // Blue
                                                    1.0f);// Alpha
     
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);//用于在上下文的帧缓存被清除时初始化每个像素点的颜色值
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);//用于在上下文的帧缓存被清除时初始化每个像素点的颜色值（其实就是个背景颜色）
     
     //生成，绑定，初始化GPU缓存内容，因为数据要发送到GPU来渲染
     glGenBuffers(1,//指定要生成的缓存标识符数量
@@ -91,8 +92,7 @@ static const SceneVertex vertices[] =
     
     glEnableVertexAttribArray(GLKVertexAttribPosition);//STEP 4，是否在渲染中使用缓存中的数据
     //STEP 5 设置指针
-    glVertexAttribPointer(GLKVertexAttribPosition,//当前绑定的缓存包含每个顶点的位置信
-                                                    //息
+    glVertexAttribPointer(GLKVertexAttribPosition,//当前绑定的缓存包含每个顶点的位置信息
                           3,//每个位置有三部分
                           GL_FLOAT,//每个部分都保存了float类型的数据
                           GL_FALSE,//小数点固定数据是否可以被改变
@@ -118,7 +118,8 @@ static const SceneVertex vertices[] =
     
     //STEP 7 删除
     if (0 != vertexBufferID) {
-        glDeleteBuffers(1, &vertexBufferID);
+        glDeleteBuffers(1,//缓存区数目
+                        &vertexBufferID);
     }
     view.context = nil;
     [EAGLContext setCurrentContext:nil];
