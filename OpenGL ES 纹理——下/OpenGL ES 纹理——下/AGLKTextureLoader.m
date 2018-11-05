@@ -25,20 +25,16 @@ typedef enum
 AGLKPowerOf2;
 
 
-/////////////////////////////////////////////////////////////////
-// Forward declaration of function
 static AGLKPowerOf2 AGLKCalculatePowerOf2ForDimension(
                                                       GLuint dimension);
 
-/////////////////////////////////////////////////////////////////
-// Forward declaration of function
+
 static NSData *AGLKDataWithResizedCGImageBytes(
                                                CGImageRef cgImage,
                                                size_t *widthPtr,
                                                size_t *heightPtr);
 
-/////////////////////////////////////////////////////////////////
-// Instances of AGLKTextureInfo are immutable once initialized
+// AGLKTextureInfo实例一旦初始化就不可变
 @interface AGLKTextureInfo (AGLKTextureLoader)
 
 - (id)initWithName:(GLuint)aName
@@ -51,8 +47,7 @@ static NSData *AGLKDataWithResizedCGImageBytes(
 
 @implementation AGLKTextureInfo (AGLKTextureLoader)
 
-/////////////////////////////////////////////////////////////////
-// This method is the designated initializer.
+
 - (id)initWithName:(GLuint)aName
             target:(GLenum)aTarget
              width:(size_t)aWidth
@@ -86,8 +81,7 @@ static NSData *AGLKDataWithResizedCGImageBytes(
 + (AGLKTextureInfo *)textureWithCGImage:(CGImageRef)cgImage                           options:(NSDictionary *)options
                                   error:(NSError **)outError;
 {
-    // Get the bytes to be used when copying data into new texture
-    // buffer
+    // 获取将数据复制到新纹理缓冲区时使用的字节
     size_t width;
     size_t height;
     NSData *imageData = AGLKDataWithResizedCGImageBytes(
@@ -95,31 +89,30 @@ static NSData *AGLKDataWithResizedCGImageBytes(
                                                         &width,
                                                         &height);
     
-    // Generation, bind, and copy data into a new texture buffer
+    // 生成、绑定和复制数据到一个新的纹理缓冲区
     GLuint      textureBufferID;
     
     glGenTextures(1, &textureBufferID);                  // Step 1
     glBindTexture(GL_TEXTURE_2D, textureBufferID);       // Step 2
     
-    glTexImage2D(                                        // Step 3
-                 GL_TEXTURE_2D,
-                 0,
-                 GL_RGBA,
-                 width,
-                 height,
-                 0,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-                 [imageData bytes]);
+    glTexImage2D(                                        // Step 3 复制图片像素的颜色数据到绑定的纹理缓存中
+                 GL_TEXTURE_2D,//用于2D纹理
+                 0,            //指定MIP贴图的初始细节级别，如果没有使用MI贴图，些参数必须是0
+                 GL_RGBA,      //指定在纹理缓存内每个纹素需要保存的信息数量
+                 (GLsizei)width,//指定图像的宽度
+                 (GLsizei)height,//指定图像的高度，宽度和高度要是2的幂
+                 0,              //确定围绕纹理的纹素的一个边界的大小，但是在OpenGL ES中剖是被设置为0
+                 GL_RGBA,       //指定初始化缓存所使用的图像数据中每个像素所要保存的信息，这个参数要总与第三个参数相同
+                 GL_UNSIGNED_BYTE,//指定缓存中的纹素数据所使用的位编码类型
+                 [imageData bytes]//要被复制到绑定纹理缓存中的图片的像素颜色数据的指针(就是数据)
+                 );
     
-    // Set parameters that control texture sampling for the bound
-    // texture
+    // 设置控制绑定纹理采样的参数
     glTexParameteri(GL_TEXTURE_2D,
                     GL_TEXTURE_MIN_FILTER,
                     GL_LINEAR);
     
-    // Allocate and initialize the AGLKTextureInfo instance to be
-    // returned
+    //分配并初始化要返回的AGLKTextureInfo实例
     AGLKTextureInfo *result = [[AGLKTextureInfo alloc]
                                initWithName:textureBufferID
                                target:GL_TEXTURE_2D
@@ -129,6 +122,7 @@ static NSData *AGLKDataWithResizedCGImageBytes(
     return result;
 }
 
+//获取用于初始化纹理缓存内容的字节
 static NSData *AGLKDataWithResizedCGImageBytes(
                                                CGImageRef cgImage,
                                                size_t *widthPtr,
@@ -142,25 +136,20 @@ static NSData *AGLKDataWithResizedCGImageBytes(
     size_t originalHeight = CGImageGetWidth(cgImage);
     
     NSCAssert(0 < originalWidth, @"Invalid image width");
-    NSCAssert(0 < originalHeight, @"Invalid image width");
+    NSCAssert(0 < originalHeight, @"Invalid image height");
     
-    // Calculate the width and height of the new texture buffer
-    // The new texture buffer will have power of 2 dimensions.
-    size_t width = AGLKCalculatePowerOf2ForDimension(
-                                                     originalWidth);
-    size_t height = AGLKCalculatePowerOf2ForDimension(
-                                                      originalHeight);
+    // 计算新纹理缓冲区的宽度和高度新纹理缓冲区将具有2维的能力。
+    size_t width = AGLKCalculatePowerOf2ForDimension((GLuint)originalWidth);
+    size_t height = AGLKCalculatePowerOf2ForDimension((GLuint)originalHeight);
     
-    // Allocate sufficient storage for RGBA pixel color data with
-    // the power of 2 sizes specified
+    // 为RGBA像素颜色数据分配足够的存储空间，指定2个大小
     NSMutableData    *imageData = [NSMutableData dataWithLength:
                                    height * width * 4];  // 4 bytes per RGBA pixel
     
     NSCAssert(nil != imageData,
               @"Unable to allocate image storage");
     
-    // Create a Core Graphics context that draws into the
-    // allocated bytes
+    // 创建一个核心图形上下文来提取已分配的字节
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef cgContext = CGBitmapContextCreate(
                                                    [imageData mutableBytes], width, height, 8,
@@ -168,7 +157,7 @@ static NSData *AGLKDataWithResizedCGImageBytes(
                                                    kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
     
-    // Flip the Core Graphics Y-axis for future drawing
+    // 翻转y轴，原因是OpenGL ES的纹理坐标系会放置在原点左下角，同时y值向上增大，翻转y轴确保了图像字节拥有适用于纹理缓存的正确方向
     CGContextTranslateCTM (cgContext, 0, height);
     CGContextScaleCTM (cgContext, 1.0, -1.0);
     
@@ -186,10 +175,7 @@ static NSData *AGLKDataWithResizedCGImageBytes(
 }
 
 
-/////////////////////////////////////////////////////////////////
-// This function calculates and returns the nearest power of 2
-// that is greater than or equal to the dimension argument and
-// less than or equal to 1024.
+// 计算并返回最接近的2的幂，它大于或等于维度参数，小于或等于1024。
 static AGLKPowerOf2 AGLKCalculatePowerOf2ForDimension(
                                                       GLuint dimension)
 {

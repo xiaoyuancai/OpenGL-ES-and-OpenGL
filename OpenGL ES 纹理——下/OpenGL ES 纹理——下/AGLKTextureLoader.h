@@ -16,14 +16,14 @@
 @private
     GLuint name;
     GLenum target;
-    GLuint width;
-    GLuint height;
+    size_t width;
+    size_t height;
 }
 
 @property (readonly) GLuint name;
 @property (readonly) GLenum target;
-@property (readonly) GLuint width;
-@property (readonly) GLuint height;
+@property (readonly) size_t width;
+@property (readonly) size_t height;
 
 @end
 

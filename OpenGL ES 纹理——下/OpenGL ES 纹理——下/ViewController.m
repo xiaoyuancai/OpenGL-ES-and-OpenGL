@@ -67,9 +67,9 @@ static const SceneVertex vertices[] =
     CGImageRef imageRef =
     [[UIImage imageNamed:@"leaves.gif"] CGImage];
     
-    //GLKTextureLoader类 用于将一个纹理图像加载到一个OPenGL ES纹理缓存中（GLKTextureLoader会自动调用glTextParameteri()方法来创建的纹理缓存设置OpenLG ES取样和循环模式）
+    //GLKTextureLoader类 用于将一个纹理图像加载到一个OPenGL ES纹理缓存中（GLKTextureLoader会自动调用glTextParameteri()方法来创建纹理缓存设置OpenLG ES取样和循环模式）
     //textureInfo 封装了与刚创建的纹理缓存相关的信息，包括它的尺寸及它是否包含MIP贴图(此示例没有贴图)。
-    GLKTextureInfo *textureInfo = [GLKTextureLoader textureWithCGImage:imageRef options:nil error:NULL];
+//    GLKTextureInfo *textureInfo = [GLKTextureLoader textureWithCGImage:imageRef options:nil error:NULL];
     
     AGLKTextureInfo *textureInfo1 = [AGLKTextureLoader
                                     textureWithCGImage:imageRef
