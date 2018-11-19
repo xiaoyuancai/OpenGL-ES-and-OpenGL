@@ -20,6 +20,7 @@
 		A4C7B7B72189AB1C00851B32 /* AGLKVertexAttribArrayBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C7B7B62189AB1C00851B32 /* AGLKVertexAttribArrayBuffer.m */; };
 		A4C7B7BA2189AB7300851B32 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C7B7B92189AB7300851B32 /* OpenGLES.framework */; };
 		A4C7B7BC2189B4FC00851B32 /* leaves.gif in Resources */ = {isa = PBXBuildFile; fileRef = A4C7B7BB2189B4FC00851B32 /* leaves.gif */; };
+		A4D1D9712191851F003CEA46 /* beetle.png in Resources */ = {isa = PBXBuildFile; fileRef = A4D1D9702191851F003CEA46 /* beetle.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		A4C7B7B62189AB1C00851B32 /* AGLKVertexAttribArrayBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGLKVertexAttribArrayBuffer.m; sourceTree = "<group>"; };
 		A4C7B7B92189AB7300851B32 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A4C7B7BB2189B4FC00851B32 /* leaves.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = leaves.gif; sourceTree = "<group>"; };
+		A4D1D9702191851F003CEA46 /* beetle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = beetle.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				A4C7B7BB2189B4FC00851B32 /* leaves.gif */,
+				A4D1D9702191851F003CEA46 /* beetle.png */,
 				A4C7B79C2189AA3800851B32 /* AppDelegate.h */,
 				A4C7B79D2189AA3800851B32 /* AppDelegate.m */,
 				A4C7B79F2189AA3800851B32 /* ViewController.h */,
@@ -169,6 +172,7 @@
 				A4C7B7A92189AA3800851B32 /* LaunchScreen.storyboard in Resources */,
 				A4C7B7A62189AA3800851B32 /* Assets.xcassets in Resources */,
 				A4C7B7BC2189B4FC00851B32 /* leaves.gif in Resources */,
+				A4D1D9712191851F003CEA46 /* beetle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
