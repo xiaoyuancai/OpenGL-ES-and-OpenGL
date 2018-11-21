@@ -34,7 +34,6 @@ int main()
 #endif
     
     // 创建窗口
-    // --------------------
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
@@ -46,19 +45,16 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     
     // glad: 加载OpenGL函数指针
-    // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
     
-    // 创建和编译着色器程序
-    // ------------------------------------
-    Shader ourShader("/Users/yuanle/Desktop/OpenGL_shader_file/OpenGL_shader_file/3.3.shader.vs", "/Users/yuanle/Desktop/OpenGL_shader_file/OpenGL_shader_file/3.3.shader.fs");
+    // 创建和编译着色器程序,注意使用自己的正确路径，而不是“我的路径”
+    Shader ourShader("/Users/yuanle/Documents/OpenGL-ES-and-OpenGL/OpenGL_shader_file/OpenGL_shader_file/3.3.shader.vs", "/Users/yuanle/Documents/OpenGL-ES-and-OpenGL/OpenGL_shader_file/OpenGL_shader_file/3.3.shader.fs");
     
     // 设置顶点坐标 (顶点缓存buffer(s)) 并且配置顶点属性
-    // ------------------------------------------------------------------
     float vertices[] = {
         // 位置         // 颜色
         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // 右下角
